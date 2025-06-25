@@ -17,6 +17,22 @@ services:
       - /app/node_modules
     command: npm run dev
 
+  test:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://user:password@postgres:5432/testdb
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run test:redis
+
   postgres:
     image: postgres:15
     environment:

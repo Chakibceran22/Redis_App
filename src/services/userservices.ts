@@ -4,9 +4,9 @@ import { User } from "../models/User";
 
 export class UserService {
   private static CACHE_TTL = 300;
-  static async createUser(
+  static async createUser (
     userData: Omit<User, "id" | "created_at">
-  ): Promise<void> {
+  ): Promise<User> {
     const result = await query(
       "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
       [userData.name, userData.email]
